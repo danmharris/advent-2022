@@ -4,7 +4,8 @@ require 'erb'
 
 day = ARGV.shift
 
-lib_template = %{# frozen_string_literal: true
+lib_template = <<~LIB
+  # frozen_string_literal: true
 
   require 'solution'
 
@@ -21,13 +22,14 @@ lib_template = %{# frozen_string_literal: true
 
     end
   end
-}.gsub(/^  /, '')
+LIB
 lib_content = ERB.new(lib_template)
 
-lib_file = File.join(Dir.pwd, 'lib', 'solution', "day_#{day}.rb")
+lib_file = File.join(Dir.pwd, 'lib', 'solution', "day#{day}.rb")
 File.write(lib_file, lib_content.result)
 
-spec_template = %{# frozen_string_literal: true
+spec_template = <<~SPEC
+  frozen_string_literal: true
 
   require 'solution/day<%= day %>'
 
@@ -39,8 +41,16 @@ spec_template = %{# frozen_string_literal: true
         expect(sol.part1(input)).to be_nil
       end
     end
+
+    describe 'part2' do
+      it 'runs against example' do
+        sol = described_class.new
+        input = []
+        expect(sol.part2(input)).to be_nil
+      end
+    end
   end
-}.gsub(/^  /, '')
+SPEC
 spec_content = ERB.new(spec_template)
 
 spec_file = File.join(Dir.pwd, 'spec', "day#{day}_spec.rb")
