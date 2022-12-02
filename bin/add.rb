@@ -29,7 +29,7 @@ lib_file = File.join(Dir.pwd, 'lib', 'solution', "day#{day}.rb")
 File.write(lib_file, lib_content.result)
 
 spec_template = <<~SPEC
-  frozen_string_literal: true
+  # frozen_string_literal: true
 
   require 'solution/day<%= day %>'
 
