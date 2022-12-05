@@ -4,33 +4,13 @@ require 'solution'
 
 class Day05 < Solution
   def parse
-    res = {
-      initial: [],
-      moves: []
-    }
-
     data_path = File.join(Dir.pwd, 'data', self.class.name.downcase)
     dat = File.read(data_path).split(/\n\n/)
-    initial = dat[0].split(/\n/).reverse
 
-    indexes = initial.shift.chars
-
-    initial.each do |line|
-      line.chars.each_with_index do |v, i|
-        next if v.nil?
-        next unless v.match(/[A-Z]/)
-
-        index = indexes[i].to_i
-        res[:initial][index] ||= []
-        res[:initial][index].push(v)
-      end
-    end
-
-    moves = dat[1]
-    res[:moves] = moves.split(/\n/).map do |move|
-      move.match(/move (\d+) from (\d+) to (\d+)/).captures.map(&:to_i)
-    end
-    res
+    {
+      initial: parse_crates(dat[0]),
+      moves: parse_moves(dat[1])
+    }
   end
 
   def part1(input)
@@ -43,13 +23,7 @@ class Day05 < Solution
       end
     end
 
-    res = String.new
-    crates.each do |crate|
-      next if crate.nil?
-
-      res << crate.pop
-    end
-    res
+    top_of_crates(crates)
   end
 
   def part2(input)
@@ -64,7 +38,36 @@ class Day05 < Solution
       end
       crates[to].concat(tmp)
     end
+    top_of_crates(crates)
+  end
 
+  private
+
+  def parse_crates(crates)
+    initial = crates.split(/\n/).reverse
+    indexes = initial.shift.chars
+    crates = []
+
+    initial.each do |line|
+      line.chars.each_with_index do |v, i|
+        next if v.nil?
+        next unless v.match(/[A-Z]/)
+
+        index = indexes[i].to_i
+        crates[index] ||= []
+        crates[index].push(v)
+      end
+    end
+    crates
+  end
+
+  def parse_moves(moves)
+    moves.split(/\n/).map do |move|
+      move.match(/move (\d+) from (\d+) to (\d+)/).captures.map(&:to_i)
+    end
+  end
+
+  def top_of_crates(crates)
     res = String.new
     crates.each do |crate|
       next if crate.nil?
