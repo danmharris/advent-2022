@@ -3,10 +3,9 @@
 class Solution
   def self.run
     sol = new
-    input = sol.parse
 
-    puts "Part 1: #{sol.part1(input)}"
-    puts "Part 2: #{sol.part2(input)}"
+    puts "Part 1: #{sol.part1(sol.parse)}"
+    puts "Part 2: #{sol.part2(sol.parse)}"
   end
 
   private
