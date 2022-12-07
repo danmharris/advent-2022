@@ -20,34 +20,16 @@ class Day07 < Solution
 
   def part1(input)
     input.dir_size
-
-    total = 0
-    stack = [input]
-    loop do
-      curr = stack.pop
-      break if curr.nil?
-      next if curr.children.empty?
-
-      total += curr.sz if curr.sz <= 100000
-      stack.push(*curr.children)
+    input.walk_tree(0) do |curr, res|
+      res + (curr.sz <= 100000 ? curr.sz : 0)
     end
-    total
   end
 
   def part2(input)
     input.dir_size
-
-    res = input.sz
-    stack = [input]
-    loop do
-      curr = stack.pop
-      break if curr.nil?
-      next if curr.children.empty?
-
-      res = curr.sz if input.sz - curr.sz <= 40000000 && curr.sz < res
-      stack.push(*curr.children)
+    input.walk_tree(input.sz) do |curr, res|
+      input.sz - curr.sz <= 40000000 && curr.sz < res ? curr.sz : res
     end
-    res
   end
 end
 
@@ -65,6 +47,19 @@ Node = Struct.new('Node', :name, :children, :sz) do
     return sz unless sz.nil?
 
     self.sz = children.map(&:dir_size).sum
+  end
+
+  def walk_tree(res, &block)
+    stack = [self]
+    loop do
+      curr = stack.pop
+      break if curr.nil?
+      next if curr.children.empty?
+
+      res = block.call(curr, res)
+      stack.push(*curr.children)
+    end
+    res
   end
 end
 
