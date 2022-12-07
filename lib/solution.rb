@@ -11,7 +11,14 @@ class Solution
   private
 
   def data
-    data_path = File.join(Dir.pwd, 'data', self.class.name.downcase)
     File.readlines(data_path, chomp: true)
+  end
+
+  def data_whole
+    File.read(data_path)
+  end
+
+  def data_path
+    File.join(Dir.pwd, 'data', self.class.name.downcase)
   end
 end

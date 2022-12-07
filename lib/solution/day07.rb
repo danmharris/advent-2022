@@ -4,10 +4,7 @@ require 'solution'
 
 class Day07 < Solution
   def parse(input = nil)
-    if input.nil?
-      data_path = File.join(Dir.pwd, 'data', self.class.name.downcase)
-      input = File.read(data_path)
-    end
+    input = data_whole if input.nil?
 
     root = Node.new('/', [])
     cmds = input.split(/\n?\$ /).drop(2)

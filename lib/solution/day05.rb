@@ -4,8 +4,7 @@ require 'solution'
 
 class Day05 < Solution
   def parse
-    data_path = File.join(Dir.pwd, 'data', self.class.name.downcase)
-    dat = File.read(data_path).split(/\n\n/)
+    dat = data_whole.split(/\n\n/)
 
     {
       initial: parse_crates(dat[0]),
